@@ -7,7 +7,5 @@ _windows
 tmp
 .DS_Store
 .vscode
-*.css
-*.css.map
 .sass-cache
 npm-debug.log
