@@ -9,3 +9,4 @@ tmp
 .vscode
 .sass-cache
 npm-debug.log
+.vs
