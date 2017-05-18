@@ -1,14 +1,11 @@
 const path = require('path')
-const database = require('./../config/database')
+const Product = require('./../models/product.model')
 
 function getHomePage (req, res) {
-  let products = database.products.getAll()
-  let productNameQuery = req.query.pname
-  if (productNameQuery) {
-    products = products.filter(p => { return p.name.toLocaleLowerCase().includes(productNameQuery.toLocaleLowerCase()) })
-  }
-
-  res.render(path.join(__dirname, '../views/home/index'), { products: products })
+  let name = new RegExp(req.query.name, 'gui')
+  Product.find({name: {$regex: name}}).then(products => {
+    res.render(path.join(__dirname, '../views/home/index'), { products })
+  }).catch(err => res.status(500).send(err))
 }
 
 module.exports = {

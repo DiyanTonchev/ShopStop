@@ -1,18 +1,18 @@
 const path = require('path')
-const database = require('./../config/database')
+const Product = require('./../models/product.model')
 
 function getAddProductPage (req, res) {
   res.render(path.join(__dirname, '../views/products/add'))
 }
 
 function addProduct (req, res) {
-  let product = req.body
-  database.products.addProduct(product)
-  res.redirect(302, '/')
+  new Product(req.body).save().then((response) => {
+    res.redirect(302, '/')
+  }).catch(err => res.status(500).send(err))
 }
 
 function findByName () {
-
+  //  TODO implement
 }
 
 module.exports = {

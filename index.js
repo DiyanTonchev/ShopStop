@@ -1,18 +1,35 @@
 const express = require('express')
-const app = express()
+const mongoose = require('mongoose')
 const path = require('path')
 const bodyParser = require('body-parser')
+const serverConfig = require('./config/config')
 const routes = require('./routes/routes')
 
-const port = 3000
+// Initialize the Express App
+const app = express()
 
 app.set('view engine', 'ejs')
 
+// Set native promises as mongoose promise
+mongoose.Promise = global.Promise
+
+// MongoDB Connection
+mongoose.connect(serverConfig.mongoURL, (error) => {
+  if (error) {
+    console.error('Please make sure Mongodb is installed and running!')
+    throw error
+  }
+
+  console.log('MongoDB up and running!')
+})
+
+// Apply body Parser and server public assets and routes
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(routes)
 
-app.listen(port, function () {
-  console.log(`App listening on port ${port}!`)
+// start app
+app.listen(serverConfig.port, () => {
+  console.log(`App is running on port ${serverConfig.port}!`)
 })

@@ -21,13 +21,13 @@
     <main>
         <h1 class="head-title">Welcome to ShopStop!</h1>
         <form id="search-form">
-            <input type="text" name="pname" placeholder="Search...">
+            <input type="text" name="name" placeholder="Search...">
             <input type="submit" value="Search">
         </form>
         <div class="cards">
             <% products.forEach(function(product) { %>
                 <div class="product-card">
-                    <img class="product-img" src="<%= product.image %>" alt="">
+                    <img class="product-img" src="<%= product.imageUrl %>" alt="">
                     <h2>
                         <%= product.name %>
                     </h2>
