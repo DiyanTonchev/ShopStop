@@ -8,9 +8,21 @@ function getAddProductPage (req, res) {
 }
 
 function addProduct (req, res) {
+  if (!req.body.name) {
+    res.status(403).end()
+  }
+
   let newProduct = new Product(req.body)
   newProduct.slug = slug(newProduct.name.toLocaleLowerCase(), { lowercase: true })
   newProduct.cuid = cuid()
+
+  if (req.file) {
+    let filename = req.file.path.split(/[\\\/]/g).pop()
+    newProduct.imagePath = `content/images/${filename}`
+  } else {
+    newProduct.imagePath = 'content/images/default-product.jpg'
+  }
+
   newProduct.save().then((saved) => {
     res.redirect(302, '/')
   }).catch(err => res.status(500).send(err))

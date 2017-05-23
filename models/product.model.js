@@ -6,7 +6,7 @@ const productSchema = new Schema({
   description: { type: String },
   price: { type: Number, min: 0 },
   // creator: Schema.Types.ObjectId
-  imageUrl: { type: String },
+  imagePath: { type: String },
   slug: { type: 'String', required: true },
   cuid: { type: 'String', required: true }
   // isBought: { type: Boolean },

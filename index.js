@@ -27,6 +27,7 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/favicon.ico', express.static(path.join(__dirname, 'public', 'content', 'images', 'favicon.ico')))
 app.use(routes)
 
 // start app

@@ -19,10 +19,10 @@
         </nav>
     </header>
     <main>
-        <form class="form center-form" method="post">
+        <form class="form center-form" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input id="name" name="name" type="text" class="input-field" />
+                <input id="name" name="name" type="text" class="input-field" required="true"/>
             </div>
 
             <div class="form-group">
@@ -32,12 +32,12 @@
 
             <div class="form-group">
                 <label for="price">Price</label>
-                <input id="price" name="price" type="number" step="0.01" class="input-field" />
+                <input id="price" name="price" type="number" step="0.01" class="input-field" accept="application/x-zip-compressed,image/*" />
             </div>
 
             <div class="form-group">
                 <label for="image">Image</label>
-                <input id="image" name="imageUrl" type="text" class="input-field" />
+                <input id="image" name="image" type="file" class="input-field" />
             </div>
 
             <div class="form-group">
