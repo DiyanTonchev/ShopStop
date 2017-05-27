@@ -12,5 +12,4 @@ npm-debug.log
 .vs
 *.min.css
 *.map
-Procfile
 .env
