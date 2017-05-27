@@ -10,6 +10,4 @@ tmp
 .sass-cache
 npm-debug.log
 .vs
-*.min.css
-*.map
 .env
