@@ -9,7 +9,7 @@ gulp.task('run-db', shell.task([
 ]))
 
 gulp.task('run-server', shell.task([
-  'node index.js'
+  'nodemon index.js'
 ]))
 
 gulp.task('minify-css', () => {
