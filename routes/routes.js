@@ -1,9 +1,10 @@
 const express = require('express')
-const router = express.Router()
 const path = require('path')
-const ProductController = require('./../controllers/product.controller')
-const HomeController = require('./../controllers/home.controller')
 const multer = require('multer')
+const HomeController = require('./../controllers/home.controller')
+const ProductController = require('./../controllers/product.controller')
+const CategoryController = require('./../controllers/category.controller')
+const router = express.Router()
 
 let storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -37,6 +38,14 @@ router.route('/product/add').get((req, res) => {
 
 router.route('/product/add').post(upload.single('image'), (req, res) => {
   ProductController.addProduct(req, res)
+})
+
+router.route('/category/add').get((req, res) => {
+  CategoryController.getAddCategoryPage(req, res)
+})
+
+router.route('/category/add').post((req, res) => {
+  CategoryController.addCategory(req, res)
 })
 
 module.exports = router

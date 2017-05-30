@@ -15,6 +15,7 @@
             <ul>
                 <li><a href="/">Home Page</a></li>
                 <li><a href="/product/add">Add Product</a></li>
+                <li><a href="/category/add">Add Category</a></li>
             </ul>
         </nav>
     </header>
@@ -27,7 +28,7 @@
         <div class="cards">
             <% products.forEach(function(product) { %>
                 <div class="product-card">
-                    <img class="product-img" src="<%= product.imagePath %>" alt="">
+                    <img class="product-img" src="<%= product.image %>" alt="">
                     <h2>
                         <%= product.name %>
                     </h2>

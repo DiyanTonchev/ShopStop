@@ -18,9 +18,9 @@ function addProduct (req, res) {
 
   if (req.file) {
     let filename = req.file.path.split(/[\\\/]/g).pop()
-    newProduct.imagePath = `content/images/${filename}`
+    newProduct.image = `content/images/${filename}`
   } else {
-    newProduct.imagePath = 'content/images/default-product.jpg'
+    newProduct.image = 'content/images/default-product.jpg'
   }
 
   newProduct.save().then((saved) => {
@@ -33,7 +33,7 @@ function findByName () {
 }
 
 module.exports = {
-  getAddProductPage: getAddProductPage,
-  addProduct: addProduct,
-  findByName: findByName
+  getAddProductPage,
+  addProduct,
+  findByName
 }
