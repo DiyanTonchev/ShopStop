@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {},
+  "engines": {
+    "node": "7.10.0",
+    "npm": "4.0.3"
+  },
   "license": "MIT",
   "dependencies": {
     "body-parser": "1.17.1",
