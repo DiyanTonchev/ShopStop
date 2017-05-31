@@ -1,10 +1,13 @@
 const path = require('path')
-const Product = require('./../models/product.model')
 const cuid = require('cuid')
 const slug = require('slug')
+const Product = require('./../models/product.model')
+const Category = require('./../models/category.model')
 
 function getAddProductPage (req, res) {
-  res.render(path.join(__dirname, '../views/products/add'))
+  Category.find().then((categories) => {
+    res.render(path.join(__dirname, '../views/products/add'), { categories })
+  })
 }
 
 function addProduct (req, res) {
@@ -23,9 +26,20 @@ function addProduct (req, res) {
     newProduct.image = 'content/images/default-product.jpg'
   }
 
-  newProduct.save().then((saved) => {
-    res.redirect(302, '/')
-  }).catch(err => res.status(500).send(err))
+  newProduct
+    .save()
+    .then((savedProduct) => {
+      console.log(savedProduct)
+      Category
+        .findById(savedProduct.category)
+        .then((category) => {
+          console.log(category)
+          category.products.push(savedProduct._id)
+          category.save()
+          res.redirect(302, '/')
+        })
+    })
+    .catch(err => res.status(500).send(err))
 }
 
 function findByName () {
