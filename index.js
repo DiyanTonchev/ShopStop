@@ -9,7 +9,7 @@ const routes = require('./routes/routes')
 // Initialize the Express App
 const app = express()
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'pug')
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise

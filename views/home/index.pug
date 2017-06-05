@@ -1,0 +1,32 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    title ShopStop
+    link(rel='stylesheet', href='content/styles/site.min.css')
+  body
+    header
+      nav.nav
+        ul
+          li
+            a(href='/') Home Page
+          li
+            a(href='/product/add') Add Product
+          li
+            a(href='/category/add') Add Category
+    main
+      h1.head-title Welcome to ShopStop!
+      form#search-form
+        input(type='text', name='name', placeholder='Search...')
+        input(type='submit', value='Search')
+      .cards
+        each product in products
+            .product-card
+                img.product-img(src=product.image alt='')
+                h2 #{product.name}
+                p #{product.description}
+                p Price: #{product.price} 
+    footer
+      p © ShopStop

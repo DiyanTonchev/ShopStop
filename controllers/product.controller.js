@@ -29,7 +29,6 @@ function addProduct (req, res) {
   newProduct
     .save()
     .then((savedProduct) => {
-      console.log(savedProduct)
       Category
         .findById(savedProduct.category)
         .then((category) => {
