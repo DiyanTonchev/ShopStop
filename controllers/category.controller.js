@@ -1,10 +1,9 @@
-const path = require('path')
 const Category = require('./../models/category.model')
 const cuid = require('cuid')
 const slug = require('slug')
 
 function getAddCategoryPage (req, res) {
-  res.render(path.join(__dirname, '../views/category/add'))
+  res.render('category/add')
 }
 
 function addCategory (req, res) {

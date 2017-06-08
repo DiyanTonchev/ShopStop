@@ -1,4 +1,3 @@
-const path = require('path')
 const cuid = require('cuid')
 const slug = require('slug')
 const Product = require('./../models/product.model')
@@ -6,7 +5,7 @@ const Category = require('./../models/category.model')
 
 function getAddProductPage (req, res) {
   Category.find().then((categories) => {
-    res.render(path.join(__dirname, '../views/products/add'), { categories })
+    res.render('product/add', { categories })
   })
 }
 
@@ -32,7 +31,6 @@ function addProduct (req, res) {
       Category
         .findById(savedProduct.category)
         .then((category) => {
-          console.log(category)
           category.products.push(savedProduct._id)
           category.save()
           res.redirect(302, '/')

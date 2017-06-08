@@ -10,6 +10,7 @@ const routes = require('./routes/routes')
 const app = express()
 
 app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, 'views'))
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise
