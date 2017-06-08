@@ -20,7 +20,19 @@ function addCategory (req, res) {
   }).catch(err => res.status(500).send(err))
 }
 
+function getProducts (req, res) {
+  let categoryName = req.params.category
+
+  Category
+    .findOne({ slug: categoryName })
+    .populate('products')
+    .then((category) => {
+      res.render('category/products', { category })
+    })
+}
+
 module.exports = {
   getAddCategoryPage,
-  addCategory
+  addCategory,
+  getProducts
 }

@@ -15,7 +15,6 @@ let storage = multer.diskStorage({
   }
 })
 
-
 let upload = multer({
   storage: storage
   // fileFilter: (req, file, callback) => {
@@ -46,6 +45,10 @@ router.route('/category/add').get((req, res) => {
 
 router.route('/category/add').post((req, res) => {
   CategoryController.addCategory(req, res)
+})
+
+router.route('/category/:category/products').get((req, res) => {
+  CategoryController.getProducts(req, res)
 })
 
 module.exports = router
