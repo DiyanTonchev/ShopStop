@@ -66,8 +66,15 @@ function editProduct (req, res) {
     product.description = editedProduct.description
     product.price = editedProduct.price || product.price
     if (req.file) {
+      let oldImage = product.image
       let filename = req.file.path.split(/[\\\/]/g).pop()
       product.image = `content/images/${filename}`
+      fs.unlink(path.join(__dirname, '../', 'public', oldImage), (err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+      })
     }
 
     if (editedProduct.category.toString() !== product.category.toString()) {
