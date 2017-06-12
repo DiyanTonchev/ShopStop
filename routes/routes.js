@@ -27,47 +27,59 @@ let upload = multer({
   // }
 })
 
-// Home route
+// HOME ROUTE
 router.route('/').get((req, res) => {
   HomeController.getHomePage(req, res)
 })
 
-// Product routes
+// PRODUCT ROUTES
+// GET
 router.route('/product/add').get((req, res) => {
   ProductController.getAddProductPage(req, res)
+})
+
+router.route('/product/buy/:id').get((req, res) => {
+  ProductController.getBuyProductPage(req, res)
 })
 
 router.route('/product/edit/:id').get((req, res) => {
   ProductController.getEditProductPage(req, res)
 })
 
+router.route('/product/delete/:id').get((req, res) => {
+  ProductController.getDeleteProductPage(req, res)
+})
+
+// POST
 router.route('/product/add').post(upload.single('image'), (req, res) => {
   ProductController.addProduct(req, res)
+})
+
+router.route('/product/buy/:id').post((req, res) => {
+  ProductController.buyProduct(req, res)
 })
 
 router.route('/product/edit/:id').post(upload.single('image'), (req, res) => {
   ProductController.editProduct(req, res)
 })
 
-router.route('/product/delete/:id').get((req, res) => {
-  ProductController.getDeleteProductPage(req, res)
-})
-
 router.route('/product/delete/:id').post((req, res) => {
   ProductController.deleteProduct(req, res)
 })
 
-// Category routes
+// CATEGORY ROUTES
+// GET
 router.route('/category/add').get((req, res) => {
   CategoryController.getAddCategoryPage(req, res)
 })
 
-router.route('/category/add').post((req, res) => {
-  CategoryController.addCategory(req, res)
-})
-
 router.route('/category/:category/products').get((req, res) => {
   CategoryController.getProducts(req, res)
+})
+
+// POST
+router.route('/category/add').post((req, res) => {
+  CategoryController.addCategory(req, res)
 })
 
 module.exports = router
