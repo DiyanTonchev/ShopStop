@@ -17,7 +17,7 @@ block content
       input#image.input-field(name='image', type='file', accept='.jpg,.jpeg,.png')
     .form-group
       label(for='description') Group
-      select.input-field(name='category')
+      select.input-field(name='category', required='true')
         each category in categories
           option(value=`${category._id}`)=category.name
     .form-group

@@ -85,12 +85,8 @@ router.route('/category/add').post((req, res) => {
 
 // GLOBAL ROUTE
 router.route('*').all((req, res, next) => {
-  req.url = '/'
-  next()
-}, (req, res) => {
   res.status('404')
-  res.render('not-found', { path: path.join('images', '404.jpg') })
-  res.end()
+  res.render('not-found', {text: 'Error 404! I find your lack of navigation disturbing...'})
 })
 
 module.exports = router

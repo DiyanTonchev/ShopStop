@@ -11,4 +11,3 @@ tmp
 npm-debug.log
 .vs
 .env
-package-lock.json

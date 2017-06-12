@@ -10,7 +10,7 @@ const productSchema = new Schema({
   slug: { type: 'String', required: true },
   cuid: { type: 'String', required: true },
   isBought: { type: Boolean, default: false },
-  category: { type: Schema.Types.ObjectId, ref: 'Category' }
+  category: { type: Schema.Types.ObjectId, ref: 'Category', required: true }
 })
 
 module.exports = mongoose.model('Product', productSchema)

@@ -4,10 +4,6 @@ const cleanCSS = require('gulp-clean-css')
 const sourcemaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
 
-gulp.task('run-db', shell.task([
-  'mongod --dbpath %cd%\\..\\db\\MongoDB\\data'
-]))
-
 gulp.task('run-server', shell.task([
   'nodemon index.js'
 ]))

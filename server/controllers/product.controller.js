@@ -158,10 +158,6 @@ function deleteProduct (req, res) {
     })
 }
 
-function findByName () {
-  //  TODO implement
-}
-
 module.exports = {
   getAddProductPage,
   getEditProductPage,
@@ -170,6 +166,5 @@ module.exports = {
   addProduct,
   buyProduct,
   editProduct,
-  deleteProduct,
-  findByName
+  deleteProduct
 }
