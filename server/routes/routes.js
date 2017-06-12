@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const multer = require('multer')
 const router = express.Router()
-const serverConfig = require('./../../config')
+const serverConfig = require('./../config')
 const HomeController = require('./../controllers/home.controller')
 const ProductController = require('./../controllers/product.controller')
 const CategoryController = require('./../controllers/category.controller')
@@ -81,6 +81,16 @@ router.route('/category/:category/products').get((req, res) => {
 // POST
 router.route('/category/add').post((req, res) => {
   CategoryController.addCategory(req, res)
+})
+
+// GLOBAL ROUTE
+router.route('*').all((req, res, next) => {
+  req.url = '/'
+  next()
+}, (req, res) => {
+  res.status('404')
+  res.render('not-found', { path: path.join('images', '404.jpg') })
+  res.end()
 })
 
 module.exports = router

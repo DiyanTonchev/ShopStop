@@ -3,7 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const path = require('path')
 const bodyParser = require('body-parser')
-const serverConfig = require('./config')
+const serverConfig = require('./server/config')
 const routes = require('./server/routes/routes')
 
 // Initialize the Express App
