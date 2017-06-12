@@ -1,21 +1,22 @@
 const express = require('express')
 const path = require('path')
 const multer = require('multer')
+const router = express.Router()
+const serverConfig = require('./../../config')
 const HomeController = require('./../controllers/home.controller')
 const ProductController = require('./../controllers/product.controller')
 const CategoryController = require('./../controllers/category.controller')
-const router = express.Router()
 
-let storage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, '../public/content/images'))
+    callback(null, path.join(serverConfig.rootPath, 'public', 'content', 'images'))
   },
   filename: (req, file, callback) => {
     callback(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`)
   }
 })
 
-let upload = multer({
+const upload = multer({
   storage: storage
   // fileFilter: (req, file, callback) => {
   //   let extension = path.extname(file.originalname)

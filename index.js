@@ -3,14 +3,14 @@ const express = require('express')
 const mongoose = require('mongoose')
 const path = require('path')
 const bodyParser = require('body-parser')
-const serverConfig = require('./config/config')
-const routes = require('./routes/routes')
+const serverConfig = require('./config')
+const routes = require('./server/routes/routes')
 
 // Initialize the Express App
 const app = express()
 
 app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(serverConfig.rootPath, 'views'))
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise
@@ -28,8 +28,8 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 // Apply body Parser and server public assets and routes
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use('/favicon.ico', express.static(path.join(__dirname, 'public', 'content', 'images', 'favicon.ico')))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use('/favicon.ico', express.static(path.join(serverConfig.rootPath, 'public', 'content', 'images', 'favicon.ico')))
+app.use(express.static(path.join(serverConfig.rootPath, 'public', 'content')))
 app.use(routes)
 
 // start app

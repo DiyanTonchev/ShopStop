@@ -2,6 +2,7 @@ const cuid = require('cuid')
 const slug = require('slug')
 const fs = require('fs')
 const path = require('path')
+const serverConfig = require('./../../config')
 const Product = require('./../models/product.model')
 const Category = require('./../models/category.model')
 
@@ -59,9 +60,9 @@ function addProduct (req, res) {
 
   if (req.file) {
     let filename = req.file.path.split(/[\\\/]/g).pop()
-    newProduct.image = `content/images/${filename}`
+    newProduct.image = `images/${filename}`
   } else {
-    newProduct.image = 'content/images/default-product.jpg'
+    newProduct.image = 'images/default-product.jpg'
   }
 
   newProduct
@@ -98,8 +99,8 @@ function editProduct (req, res) {
       if (req.file) {
         let oldImage = product.image
         let filename = req.file.path.split(/[\\\/]/g).pop()
-        product.image = `content/images/${filename}`
-        fs.unlink(path.join(__dirname, '../', 'public', oldImage), (err) => {
+        product.image = `images/${filename}`
+        fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', oldImage), (err) => {
           if (err) {
             console.error(err)
             return
@@ -139,7 +140,7 @@ function deleteProduct (req, res) {
   Product
     .findByIdAndRemove(productId)
     .then((product) => {
-      fs.unlink(path.join(__dirname, '../', 'public', product.image), (err) => {
+      fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', product.image), (err) => {
         if (err) {
           console.error(err)
           return
