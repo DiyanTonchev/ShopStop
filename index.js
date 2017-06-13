@@ -3,7 +3,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const path = require('path')
 const bodyParser = require('body-parser')
-const serverConfig = require('./server/config')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const passport = require('passport')
+const serverConfig = require('./server/config/config')
 const routes = require('./server/routes/routes')
 
 // Initialize the Express App
@@ -19,12 +22,17 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
     throw error
   }
 
+  require('./server/models/user').seedAdminUser()
   console.log('MongoDB up and running!')
 })
 
 // Apply body Parser and server public assets and routes
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cookieParser)
+app.use(session({ secret: '!t@1n@b@7k0#%-hv6n-2e2Fvb-A3jShe', resave: false, saveUninitialized: false }))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use('/favicon.ico', express.static(path.join(serverConfig.rootPath, 'public', 'content', 'images', 'favicon.ico')))
 app.use(express.static(path.join(serverConfig.rootPath, 'public', 'content')))
 app.use(routes)

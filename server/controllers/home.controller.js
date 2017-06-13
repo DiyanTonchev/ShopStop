@@ -1,4 +1,4 @@
-const Product = require('./../models/product.model')
+const Product = require('./../models/product')
 
 function getHomePage (req, res) {
   let name = new RegExp(req.query.name, 'gui')

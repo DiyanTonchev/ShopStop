@@ -2,10 +2,12 @@ const express = require('express')
 const path = require('path')
 const multer = require('multer')
 const router = express.Router()
-const serverConfig = require('./../config')
+const serverConfig = require('./../config/config')
 const HomeController = require('./../controllers/home.controller')
 const ProductController = require('./../controllers/product.controller')
 const CategoryController = require('./../controllers/category.controller')
+const UserController = require('./../controllers/user.controller')
+const messages = require('./../utilities/messages')
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -86,7 +88,7 @@ router.route('/category/add').post((req, res) => {
 // GLOBAL
 router.route('*').all((req, res, next) => {
   res.status('404')
-  res.render('not-found', {text: 'Error 404! I find your lack of navigation disturbing...'})
+  res.render('not-found', { text: messages.notFound })
 })
 
 module.exports = router

@@ -1,10 +1,10 @@
+const path = require('path')
+const fs = require('fs')
 const cuid = require('cuid')
 const slug = require('slug')
-const fs = require('fs')
-const path = require('path')
-const serverConfig = require('./../config')
-const Product = require('./../models/product.model')
-const Category = require('./../models/category.model')
+const serverConfig = require('./../config/config')
+const Product = require('./../models/product')
+const Category = require('./../models/category')
 
 function getAddProductPage (req, res) {
   Category

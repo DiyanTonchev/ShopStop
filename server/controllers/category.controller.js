@@ -1,6 +1,6 @@
-const Category = require('./../models/category.model')
 const cuid = require('cuid')
 const slug = require('slug')
+const Category = require('./../models/category')
 
 function getAddCategoryPage (req, res) {
   res.render('category/add')

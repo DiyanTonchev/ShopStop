@@ -5,7 +5,8 @@ const categorySchema = new Schema({
   name: { type: String, required: true, unique: true },
   slug: { type: 'String', required: true },
   cuid: { type: 'String', required: true },
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
+  creator: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  products: [{ type: Schema.Types.ObjectId, ref: 'Product' }]
 })
 
 module.exports = mongoose.model('Category', categorySchema)
