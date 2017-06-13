@@ -28,12 +28,12 @@ const upload = multer({
   // }
 })
 
-// HOME ROUTE
+// HOME
 router.route('/').get((req, res) => {
   HomeController.getHomePage(req, res)
 })
 
-// PRODUCT ROUTES
+// PRODUCT
 // GET
 router.route('/product/add').get((req, res) => {
   ProductController.getAddProductPage(req, res)
@@ -68,7 +68,7 @@ router.route('/product/delete/:id').post((req, res) => {
   ProductController.deleteProduct(req, res)
 })
 
-// CATEGORY ROUTES
+// CATEGORY
 // GET
 router.route('/category/add').get((req, res) => {
   CategoryController.getAddCategoryPage(req, res)
@@ -83,7 +83,7 @@ router.route('/category/add').post((req, res) => {
   CategoryController.addCategory(req, res)
 })
 
-// GLOBAL ROUTE
+// GLOBAL
 router.route('*').all((req, res, next) => {
   res.status('404')
   res.render('not-found', {text: 'Error 404! I find your lack of navigation disturbing...'})
