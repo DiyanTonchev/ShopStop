@@ -88,9 +88,7 @@ router.route('/category/add').post((req, res) => {
 // GLOBAL
 router.route('*').all((req, res, next) => {
   res.status('404')
-  res
-    .render('not-found', { text: messages.notFound })
-    .catch(err => res.status(500).send(err))
+  res.render('not-found', { text: messages.notFound })
 })
 
 module.exports = router

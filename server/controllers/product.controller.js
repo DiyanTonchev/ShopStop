@@ -82,15 +82,22 @@ function addProduct (req, res) {
           res.redirect(302, '/')
         })
     })
-    .catch(err => res.status(500).send(err))
+    .catch((err) => {
+      let errors = err.errors
+      let messages = []
+      for (let currentError in errors) {
+        messages.push(errors[currentError].message)
+      }
+
+      console.error(messages)
+      res.status(400).send(messages)
+    })
 }
 
 function buyProduct (req, res) {
   // TODO
   console.log('IN PROGRESS')
-  res
-  .redirect(302, '/')
-  .catch(err => res.status(500).send(err))
+  res.redirect(302, '/')
 }
 
 function editProduct (req, res) {
@@ -140,7 +147,16 @@ function editProduct (req, res) {
         })
       }
     })
-    .catch(err => res.status(500).send(err))
+    .catch((err) => {
+      let errors = err.errors
+      let messages = []
+      for (let currentError in errors) {
+        messages.push(errors[currentError].message)
+      }
+
+      console.error(messages)
+      res.status(400).send(messages)
+    })
 }
 
 function deleteProduct (req, res) {

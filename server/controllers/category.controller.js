@@ -3,9 +3,7 @@ const slug = require('slug')
 const Category = require('./../models/category')
 
 function getAddCategoryPage (req, res) {
-  res
-    .render('category/add')
-    .catch(err => res.status(500).send(err))
+  res.render('category/add')
 }
 
 function getProducts (req, res) {
@@ -35,7 +33,16 @@ function addCategory (req, res) {
     .then((saved) => {
       res.redirect(302, '/')
     })
-    .catch(err => res.status(500).send(err))
+    .catch((err) => {
+      let errors = err.errors
+      let messages = []
+      for (let currentError in errors) {
+        messages.push(errors[currentError].message)
+      }
+
+      console.error(messages)
+      res.status(400).send(messages)
+    })
 }
 
 module.exports = {
