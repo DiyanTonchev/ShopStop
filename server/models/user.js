@@ -4,7 +4,6 @@ const cuid = require('cuid')
 const slug = require('slug')
 const encryption = require('./../utilities/encryption')
 const messages = require('./../utilities/messages')
-const admin = require('./../utilities/default-admin-credentials')
 const roles = require('./../utilities/roles')
 
 const userSchema = new Schema({
@@ -39,14 +38,14 @@ module.exports.seedAdminUser = () => {
       }
 
       let salt = encryption.generateSalt()
-      let hashedPassword = encryption.generateHashedPassword(salt, admin.password)
+      let hashedPassword = encryption.generateHashedPassword(salt, 'aDm1n@77')
       User.create({
-        username: admin.username,
+        username: 'Admin',
         password: hashedPassword,
         salt: salt,
-        firstName: admin.firstName,
-        lastName: admin.lastName,
-        slug: slug(admin.username.toLocaleLowerCase(), { lowercase: true }),
+        firstName: 'Admin',
+        lastName: 'Admin',
+        slug: slug('admin', { lowercase: true }),
         cuid: cuid(),
         roles: [roles.admin]
       })

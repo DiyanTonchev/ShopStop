@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const passport = require('passport')
-const serverConfig = require('./server/config/config')
+const serverConfig = require('./server/config')
 const routes = require('./server/routes/routes')
 
 // Initialize the Express App
@@ -29,7 +29,7 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 // Apply body Parser and server public assets and routes
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(cookieParser)
+app.use(cookieParser())
 app.use(session({ secret: '!t@1n@b@7k0#%-hv6n-2e2Fvb-A3jShe', resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
 app.use(passport.session())

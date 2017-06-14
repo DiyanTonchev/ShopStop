@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const cuid = require('cuid')
 const slug = require('slug')
-const serverConfig = require('./../config/config')
+const serverConfig = require('./../config')
 const Product = require('./../models/product')
 const Category = require('./../models/category')
 
