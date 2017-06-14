@@ -4,19 +4,23 @@ const cuid = require('cuid')
 const slug = require('slug')
 const encryption = require('./../utilities/encryption')
 const messages = require('./../utilities/messages')
-const roles = require('./../utilities/roles')
+
+const AGE_MIN_VALUE = 0
+const AGE_MAX_VALUE = 120
+const GENDERS = { values: ['Male', 'Female'], message: messages.user.gender }
+const ROLES = { values: ['Admin', 'User'], message: messages.validator.user.role }
 
 const userSchema = new Schema({
-  username: { type: String, required: messages.user.propertyIsRequired, unique: true },
-  password: { type: String, required: messages.user.propertyIsRequired },
+  username: { type: String, required: messages.validator.propertyIsRequired, unique: true },
+  password: { type: String, required: messages.validator.propertyIsRequired },
   salt: { type: String, required: true },
-  firstName: { type: String, required: messages.user.propertyIsRequired },
-  lastName: { type: String, required: messages.user.propertyIsRequired },
-  age: { type: Number, min: [0, messages.user.ageInterval], max: [120, messages.user.ageInterval] },
-  gender: { type: String, enum: { values: ['Male', 'Female'], message: messages.user.gender } },
+  firstName: { type: String, required: messages.validator.propertyIsRequired },
+  lastName: { type: String, required: messages.validator.propertyIsRequired },
+  age: { type: Number, min: [AGE_MIN_VALUE, messages.validator.user.ageInterval], max: [AGE_MAX_VALUE, messages.validator.user.ageInterval] },
+  gender: { type: String, enum: GENDERS },
   slug: { type: String, required: true },
   cuid: { type: String, required: true },
-  roles: [{ type: String }],
+  roles: [{ type: String, enum: ROLES, default: 'User' }],
   boughtProducts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   createdProducts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   createdCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
@@ -47,8 +51,8 @@ module.exports.seedAdminUser = () => {
         lastName: 'Admin',
         slug: slug('admin', { lowercase: true }),
         cuid: cuid(),
-        roles: [roles.admin]
-      })
+        roles: 'Admin'
+      }).catch(console.error)
     })
 }
 

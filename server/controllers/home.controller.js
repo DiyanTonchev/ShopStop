@@ -5,7 +5,7 @@ function getHomePage (req, res) {
   Product
     .find({ name: { $regex: name } })
     .populate('category')
-    .then(products => {
+    .then((products) => {
       res.render('home/index', { products })
     })
     .catch(err => res.status(500).send(err))

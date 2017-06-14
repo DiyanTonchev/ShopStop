@@ -12,6 +12,7 @@ function getAddProductPage (req, res) {
     .then((categories) => {
       res.render('product/add', { categories })
     })
+    .catch(err => res.status(500).send(err))
 }
 
 function getBuyProductPage (req, res) {
@@ -21,6 +22,7 @@ function getBuyProductPage (req, res) {
     .then((product) => {
       res.render('product/buy', { product })
     })
+    .catch(err => res.status(500).send(err))
 }
 
 function getEditProductPage (req, res) {
@@ -34,6 +36,7 @@ function getEditProductPage (req, res) {
           res.render('product/edit', { product, categories })
         })
     })
+    .catch(err => res.status(500).send(err))
 }
 
 function getDeleteProductPage (req, res) {
@@ -47,6 +50,7 @@ function getDeleteProductPage (req, res) {
           res.render('product/delete', { product, categories })
         })
     })
+    .catch(err => res.status(500).send(err))
 }
 
 function addProduct (req, res) {
@@ -54,6 +58,7 @@ function addProduct (req, res) {
     res.status(403).end()
   }
 
+  // TODO: Correct this
   let newProduct = new Product(req.body)
   newProduct.slug = slug(newProduct.name.toLocaleLowerCase(), { lowercase: true })
   newProduct.cuid = cuid()
@@ -62,6 +67,7 @@ function addProduct (req, res) {
     let filename = req.file.path.split(/[\\\/]/g).pop()
     newProduct.image = `images/${filename}`
   } else {
+    // TODO: add default product image
     newProduct.image = 'images/default-product.jpg'
   }
 
@@ -82,7 +88,9 @@ function addProduct (req, res) {
 function buyProduct (req, res) {
   // TODO
   console.log('IN PROGRESS')
-  res.redirect(302, '/')
+  res
+  .redirect(302, '/')
+  .catch(err => res.status(500).send(err))
 }
 
 function editProduct (req, res) {
@@ -132,6 +140,7 @@ function editProduct (req, res) {
         })
       }
     })
+    .catch(err => res.status(500).send(err))
 }
 
 function deleteProduct (req, res) {
@@ -156,6 +165,7 @@ function deleteProduct (req, res) {
         }
       })
     })
+    .catch(err => res.status(500).send(err))
 }
 
 module.exports = {

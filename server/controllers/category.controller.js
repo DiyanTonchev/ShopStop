@@ -3,7 +3,9 @@ const slug = require('slug')
 const Category = require('./../models/category')
 
 function getAddCategoryPage (req, res) {
-  res.render('category/add')
+  res
+    .render('category/add')
+    .catch(err => res.status(500).send(err))
 }
 
 function getProducts (req, res) {
@@ -15,6 +17,7 @@ function getProducts (req, res) {
     .then((category) => {
       res.render('category/products', { category })
     })
+    .catch(err => res.status(500).send(err))
 }
 
 function addCategory (req, res) {
@@ -22,6 +25,7 @@ function addCategory (req, res) {
     res.status(403).end()
   }
 
+  // TODO: Correct this
   let newCategory = new Category(req.body)
   newCategory.slug = slug(newCategory.name.toLocaleLowerCase(), { lowercase: true })
   newCategory.cuid = cuid()
@@ -30,7 +34,8 @@ function addCategory (req, res) {
     .save()
     .then((saved) => {
       res.redirect(302, '/')
-    }).catch(err => res.status(500).send(err))
+    })
+    .catch(err => res.status(500).send(err))
 }
 
 module.exports = {
