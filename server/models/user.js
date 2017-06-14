@@ -7,7 +7,7 @@ const messages = require('./../utilities/messages')
 
 const AGE_MIN_VALUE = 0
 const AGE_MAX_VALUE = 120
-const GENDERS = { values: ['Male', 'Female'], message: messages.user.gender }
+const GENDERS = { values: ['Male', 'Female'], message: messages.validator.user.gender }
 const ROLES = { values: ['Admin', 'User'], message: messages.validator.user.role }
 
 const userSchema = new Schema({
