@@ -40,8 +40,16 @@ router.route('/user/register').get((req, res) => {
   UserController.getRegisterPage(req, res)
 })
 
+router.route('/user/login').get((req, res) => {
+  UserController.getLoginPage(req, res)
+})
+
 router.route('/user/register').post((req, res) => {
   UserController.register(req, res)
+})
+
+router.route('/user/login').post((req, res) => {
+  UserController.login(req, res)
 })
 
 router.route('/user/logout').post((req, res) => {
