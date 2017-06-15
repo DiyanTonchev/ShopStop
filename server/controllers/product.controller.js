@@ -6,6 +6,8 @@ const serverConfig = require('./../config')
 const Product = require('./../models/product')
 const Category = require('./../models/category')
 
+const DEFAULT_PRODUCT_IMAGE = 'images/default-product-image.jpg'
+
 function getAddProductPage (req, res) {
   Category
     .find()
@@ -67,8 +69,7 @@ function addProduct (req, res) {
     let filename = req.file.path.split(/[\\\/]/g).pop()
     newProduct.image = `images/${filename}`
   } else {
-    // TODO: add default product image
-    newProduct.image = 'images/default-product.jpg'
+    newProduct.image = DEFAULT_PRODUCT_IMAGE
   }
 
   newProduct
@@ -115,12 +116,14 @@ function editProduct (req, res) {
         let oldImage = product.image
         let filename = req.file.path.split(/[\\\/]/g).pop()
         product.image = `images/${filename}`
-        fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', oldImage), (err) => {
-          if (err) {
-            console.error(err)
-            return
-          }
-        })
+        if (oldImage !== DEFAULT_PRODUCT_IMAGE) {
+          fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', oldImage), (err) => {
+            if (err) {
+              console.error(err)
+              return
+            }
+          })
+        }
       }
 
       if (editedProduct.category.toString() !== product.category.toString()) {
@@ -165,12 +168,14 @@ function deleteProduct (req, res) {
   Product
     .findByIdAndRemove(productId)
     .then((product) => {
-      fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', product.image), (err) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-      })
+      if (product.image !== DEFAULT_PRODUCT_IMAGE) {
+        fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', product.image), (err) => {
+          if (err) {
+            console.error(err)
+            return
+          }
+        })
+      }
 
       Category.findById(product.category).then((category) => {
         let indexOfProduct = category.products.indexOf(product._id)
