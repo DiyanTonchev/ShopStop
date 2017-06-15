@@ -5,25 +5,68 @@ const slug = require('slug')
 const encryption = require('./../utilities/encryption')
 const messages = require('./../utilities/messages')
 
+const USERNAME_MIN_LENGTH = 3
 const AGE_MIN_VALUE = 0
 const AGE_MAX_VALUE = 120
 const GENDERS = { values: ['Male', 'Female'], message: messages.validator.user.gender }
 const ROLES = { values: ['Admin', 'User'], message: messages.validator.user.role }
 
 const userSchema = new Schema({
-  username: { type: String, required: messages.validator.propertyIsRequired, unique: true },
-  password: { type: String, required: messages.validator.propertyIsRequired },
-  salt: { type: String, required: true },
-  firstName: { type: String, required: messages.validator.propertyIsRequired },
-  lastName: { type: String, required: messages.validator.propertyIsRequired },
-  age: { type: Number, min: [AGE_MIN_VALUE, messages.validator.user.ageInterval], max: [AGE_MAX_VALUE, messages.validator.user.ageInterval] },
-  gender: { type: String, enum: GENDERS },
-  slug: { type: String, required: true },
-  cuid: { type: String, required: true },
-  roles: [{ type: String, enum: ROLES, default: 'User' }],
-  boughtProducts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
-  createdProducts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
-  createdCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
+  username: {
+    type: String,
+    minlength: [USERNAME_MIN_LENGTH, messages.validator.minLength],
+    required: messages.validator.propertyIsRequired,
+    unique: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: messages.validator.propertyIsRequired
+  },
+  salt: {
+    type: String,
+    required: true
+  },
+  firstName: {
+    type: String,
+    required: messages.validator.propertyIsRequired
+  },
+  lastName: {
+    type: String,
+    required: messages.validator.propertyIsRequired
+  },
+  age: {
+    type: Number,
+    min: [AGE_MIN_VALUE, messages.validator.user.ageInterval],
+    max: [AGE_MAX_VALUE, messages.validator.user.ageInterval]
+  },
+  gender: {
+    type: String, enum: GENDERS
+  },
+  slug: {
+    type: String,
+    required: true
+  },
+  cuid: {
+    type: String, required: true
+  },
+  roles: [{
+    type: String,
+    enum: ROLES,
+    default: 'User'
+  }],
+  boughtProducts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Product'
+  }],
+  createdProducts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Product'
+  }],
+  createdCategories: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Category'
+  }]
 })
 
 userSchema.methods.authenticate = function (password) {

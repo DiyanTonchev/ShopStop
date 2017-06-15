@@ -5,7 +5,7 @@ const User = require('./../models/user')
 module.exports = () => {
   passport.use(new LocalPassport((username, password, done) => {
     User
-      .findOne({ username: username })
+      .findOne({ username })
       .then((user) => {
         if (!user) {
           return done(null, false)
