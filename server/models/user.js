@@ -6,6 +6,7 @@ const encryption = require('./../utilities/encryption')
 const messages = require('./../utilities/messages')
 
 const USERNAME_MIN_LENGTH = 3
+// const PASSWORD_PATTERN = [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/, messages.validator.user.password]
 const AGE_MIN_VALUE = 0
 const AGE_MAX_VALUE = 120
 const GENDERS = { values: ['Male', 'Female'], message: messages.validator.user.gender }
@@ -21,6 +22,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
+    // match: PASSWORD_PATTERN,
     required: messages.validator.propertyIsRequired
   },
   salt: {
@@ -95,7 +97,8 @@ module.exports.seedAdminUser = () => {
         slug: slug('admin', { lowercase: true }),
         cuid: cuid(),
         roles: 'Admin'
-      }).catch(console.error)
+      })
+      .catch(console.error)
     })
 }
 

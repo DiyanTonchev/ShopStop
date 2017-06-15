@@ -35,8 +35,20 @@ router.route('/').get((req, res) => {
   HomeController.getHomePage(req, res)
 })
 
+// USER
+router.route('/user/register').get((req, res) => {
+  UserController.getRegisterPage(req, res)
+})
+
+router.route('/user/register').post((req, res) => {
+  UserController.register(req, res)
+})
+
+router.route('/user/logout').post((req, res) => {
+  UserController.logout(req, res)
+})
+
 // PRODUCT
-// GET
 router.route('/product/add').get((req, res) => {
   ProductController.getAddProductPage(req, res)
 })
@@ -53,7 +65,6 @@ router.route('/product/delete/:id').get((req, res) => {
   ProductController.getDeleteProductPage(req, res)
 })
 
-// POST
 router.route('/product/add').post(upload.single('image'), (req, res) => {
   ProductController.addProduct(req, res)
 })
@@ -71,7 +82,6 @@ router.route('/product/delete/:id').post((req, res) => {
 })
 
 // CATEGORY
-// GET
 router.route('/category/add').get((req, res) => {
   CategoryController.getAddCategoryPage(req, res)
 })
@@ -80,7 +90,6 @@ router.route('/category/:category/products').get((req, res) => {
   CategoryController.getProducts(req, res)
 })
 
-// POST
 router.route('/category/add').post((req, res) => {
   CategoryController.addCategory(req, res)
 })
@@ -88,7 +97,7 @@ router.route('/category/add').post((req, res) => {
 // GLOBAL
 router.route('*').all((req, res, next) => {
   res.status('404')
-  res.render('not-found', { text: messages.error.notFound })
+  res.render('not-found', { text: messages.errors.notFound })
 })
 
 module.exports = router

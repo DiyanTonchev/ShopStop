@@ -7,6 +7,7 @@ const session = require('express-session')
 const passport = require('passport')
 const serverConfig = require('./config')
 const routes = require('./routes/routes')
+require('./utilities/passport')()
 
 // Initialize the Express App
 const app = express()
@@ -26,14 +27,21 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 })
 
 // Apply body Parser and server public assets and routes
+app.use('/favicon.ico', express.static(path.join(serverConfig.rootPath, 'public', 'content', 'images', 'favicon.ico')))
+app.use(express.static(path.join(serverConfig.rootPath, 'public', 'content')))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(session({ secret: '!t@1n@b@7k0#%-hv6n-2e2Fvb-A3jShe', resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
 app.use(passport.session())
-app.use('/favicon.ico', express.static(path.join(serverConfig.rootPath, 'public', 'content', 'images', 'favicon.ico')))
-app.use(express.static(path.join(serverConfig.rootPath, 'public', 'content')))
+app.use((req, res, next) => {
+  if (req.user) {
+    res.locals.user = req.user
+  }
+
+  next()
+})
 app.use(routes)
 
 // Set View Engine

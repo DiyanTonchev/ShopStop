@@ -56,14 +56,19 @@ function getDeleteProductPage (req, res) {
 }
 
 function addProduct (req, res) {
-  if (!req.body.name) {
-    res.status(403).end()
+  let data = {
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+    slug: slug(req.body.name.toLocaleLowerCase(), { lowercase: true }),
+    cuid: cuid(),
+    isBought: req.body.isBought,
+    creator: req.body.creator,
+    buyer: req.body.buyer,
+    category: req.body.category
   }
 
-  // TODO: Correct this
-  let newProduct = new Product(req.body)
-  newProduct.slug = slug(newProduct.name.toLocaleLowerCase(), { lowercase: true })
-  newProduct.cuid = cuid()
+  let newProduct = new Product(data)
 
   if (req.file) {
     let filename = req.file.path.split(/[\\\/]/g).pop()
@@ -127,27 +132,35 @@ function editProduct (req, res) {
       }
 
       if (editedProduct.category.toString() !== product.category.toString()) {
-        Category.findById(product.category).then((currentCategory) => {
-          Category.findById(editedProduct.category).then((newCategory) => {
-            let indexOfProduct = currentCategory.products.indexOf(product._id)
-            if (indexOfProduct >= 0) {
-              currentCategory.products.splice(indexOfProduct, 1)
-              currentCategory.save()
-            }
+        Category
+          .findById(product.category)
+          .then((currentCategory) => {
+            Category
+              .findById(editedProduct.category)
+              .then((newCategory) => {
+                let indexOfProduct = currentCategory.products.indexOf(product._id)
+                if (indexOfProduct >= 0) {
+                  currentCategory.products.splice(indexOfProduct, 1)
+                  currentCategory.save()
+                }
 
-            newCategory.products.push(product._id)
-            newCategory.save()
+                newCategory.products.push(product._id)
+                newCategory.save()
 
-            product.category = editedProduct.category
-            product.save().then((savedProduct) => {
-              res.redirect(302, '/')
-            })
+                product.category = editedProduct.category
+                product
+                  .save()
+                  .then((savedProduct) => {
+                    res.redirect(302, '/')
+                  })
+              })
           })
-        })
       } else {
-        product.save().then((savedProduct) => {
-          res.redirect(302, '/')
-        })
+        product
+          .save()
+          .then((savedProduct) => {
+            res.redirect(302, '/')
+          })
       }
     })
     .catch((err) => {

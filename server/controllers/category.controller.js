@@ -19,17 +19,15 @@ function getProducts (req, res) {
 }
 
 function addCategory (req, res) {
-  if (!req.body.name) {
-    res.status(403).end()
+  let data = {
+    name: req.body.name,
+    slug: slug(req.body.name.toLocaleLowerCase, { lowercase: true }),
+    cuid: cuid(),
+    creator: req.body.creator
   }
 
-  // TODO: Correct this
-  let newCategory = new Category(req.body)
-  newCategory.slug = slug(newCategory.name.toLocaleLowerCase(), { lowercase: true })
-  newCategory.cuid = cuid()
-
-  newCategory
-    .save()
+  Category(data)
+    .create()
     .then((saved) => {
       res.redirect(302, '/')
     })
