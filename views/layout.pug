@@ -9,21 +9,21 @@ html(lang='en')
   body
     header
       nav.nav
-        ul
-          li
-            a(href='/') Home Page
-          li
-            a(href='/product/add') Add Product
-          li
-            a(href='/category/add') Add Category
-          li.delimeter
-          if user
+        if user
+          ul
+            li
+              a(href='/') Home Page
+            li
+              a(href='/product/add') Add Product
+            li
+              a(href='/category/add') Add Category
+            li.delimeter
             li.align-right
               form#logout-form(method='post' action='/user/logout')
                 a(href="javascript:document.getElementById('logout-form').submit()") Logout
             li.align-right
               span=user.username    
-          else
+        else
             li.align-right  
               a(href='/user/register') Register
             li.align-right  

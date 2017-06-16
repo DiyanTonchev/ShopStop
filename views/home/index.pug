@@ -2,6 +2,7 @@ extends ../layout.pug
 
 block content
   h1.head-title Welcome to ShopStop!
+  .error-msg #{error}
   form#search-form
     input(type='text', name='name', placeholder='Search...')
     input(type='submit', value='Search')

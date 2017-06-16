@@ -8,6 +8,7 @@ const ProductController = require('./../controllers/product.controller')
 const CategoryController = require('./../controllers/category.controller')
 const UserController = require('./../controllers/user.controller')
 const messages = require('./../utilities/messages')
+const auth = require('./../utilities/auth.js')
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -57,23 +58,23 @@ router.route('/user/logout').post((req, res) => {
 })
 
 // PRODUCT
-router.route('/product/add').get((req, res) => {
+router.route('/product/add').get(auth.isAuthenticated, auth.isAuthenticated, (req, res) => {
   ProductController.getAddProductPage(req, res)
 })
 
-router.route('/product/buy/:id').get((req, res) => {
+router.route('/product/buy/:id').get(auth.isAuthenticated, (req, res) => {
   ProductController.getBuyProductPage(req, res)
 })
 
-router.route('/product/edit/:id').get((req, res) => {
+router.route('/product/edit/:id').get(auth.isAuthenticated, (req, res) => {
   ProductController.getEditProductPage(req, res)
 })
 
-router.route('/product/delete/:id').get((req, res) => {
+router.route('/product/delete/:id').get(auth.isAuthenticated, (req, res) => {
   ProductController.getDeleteProductPage(req, res)
 })
 
-router.route('/product/add').post(upload.single('image'), (req, res) => {
+router.route('/product/add').post(auth.isAuthenticated, upload.single('image'), (req, res) => {
   ProductController.addProduct(req, res)
 })
 
@@ -81,16 +82,16 @@ router.route('/product/buy/:id').post((req, res) => {
   ProductController.buyProduct(req, res)
 })
 
-router.route('/product/edit/:id').post(upload.single('image'), (req, res) => {
+router.route('/product/edit/:id').post(auth.isAuthenticated, upload.single('image'), (req, res) => {
   ProductController.editProduct(req, res)
 })
 
-router.route('/product/delete/:id').post((req, res) => {
+router.route('/product/delete/:id').post(auth.isAuthenticated, (req, res) => {
   ProductController.deleteProduct(req, res)
 })
 
 // CATEGORY
-router.route('/category/add').get((req, res) => {
+router.route('/category/add').get(auth.isAuthenticated, auth.isInRole('Admin'), (req, res) => {
   CategoryController.getAddCategoryPage(req, res)
 })
 
@@ -98,7 +99,7 @@ router.route('/category/:category/products').get((req, res) => {
   CategoryController.getProducts(req, res)
 })
 
-router.route('/category/add').post((req, res) => {
+router.route('/category/add').post(auth.isAuthenticated, auth.isInRole('Admin'), (req, res) => {
   CategoryController.addCategory(req, res)
 })
 

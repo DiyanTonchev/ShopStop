@@ -101,9 +101,29 @@ function addProduct (req, res) {
 }
 
 function buyProduct (req, res) {
-  // TODO
-  console.log('IN PROGRESS')
-  res.redirect(302, '/')
+  let productId = req.params.id
+
+  Product
+    .findById(productId)
+    .then((product) => {
+      if (product.buyer) {
+        res.render('/', { error: 'Product was already bought!' })
+        return
+      }
+
+      product.buyer = req.user._id
+      product
+        .save()
+        .then(() => {
+          req.user.boughtProducts.push(productId)
+          req.user
+            .save()
+            .then(() => {
+              res.redirect(302, '/')
+            })
+        })
+    })
+    .catch(err => res.status(500).send(err))
 }
 
 function editProduct (req, res) {

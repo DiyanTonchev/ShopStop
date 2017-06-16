@@ -29,7 +29,7 @@ function register (req, res) {
 
   if (req.body.password) {
     let salt = encryption.generateSalt()
-    let hashedPassword = encryption.generateHashedPassword('salt', req.body.password)
+    let hashedPassword = encryption.generateHashedPassword(salt, req.body.password)
     data.salt = salt
     data.password = hashedPassword
   }
@@ -65,7 +65,7 @@ function login (req, res) {
   User
     .findOne({ username: userToLogin.username })
     .then((user) => {
-      if (!user || user.authenticate(userToLogin.password)) {
+      if (!user || !user.authenticate(userToLogin.password)) {
         res.render('user/login', { error: messages.errors.invalidCredentials })
       } else {
         req.login(user, (error, user) => {

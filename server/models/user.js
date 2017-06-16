@@ -89,7 +89,7 @@ module.exports.seedAdminUser = () => {
       let salt = encryption.generateSalt()
       let hashedPassword = encryption.generateHashedPassword(salt, 'aDm1n@77')
       User.create({
-        username: 'Admin',
+        username: 'admin',
         password: hashedPassword,
         salt: salt,
         firstName: 'Admin',
