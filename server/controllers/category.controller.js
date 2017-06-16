@@ -23,11 +23,11 @@ function addCategory (req, res) {
     name: req.body.name,
     slug: slug(req.body.name.toLocaleLowerCase, { lowercase: true }),
     cuid: cuid(),
-    creator: req.body.creator
+    creator: req.user._id
   }
 
-  Category(data)
-    .create()
+  Category
+    .create(data)
     .then((saved) => {
       res.redirect(302, '/')
     })

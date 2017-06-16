@@ -9,7 +9,7 @@ module.exports = {
   },
   isInRole: (role) => {
     return (req, res, next) => {
-      if (req.user && req.user.roles.indexOf(role) > -1) {
+      if (req.user && req.user.roles.includes(role)) {
         next()
       } else {
         // If not authorized - login with proper account.

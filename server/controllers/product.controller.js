@@ -17,6 +17,7 @@ function getAddProductPage (req, res) {
     .catch(err => res.status(500).send(err))
 }
 
+// TODO auth rights
 function getBuyProductPage (req, res) {
   let productId = req.params.id
   Product
@@ -27,6 +28,7 @@ function getBuyProductPage (req, res) {
     .catch(err => res.status(500).send(err))
 }
 
+// TODO auth rights
 function getEditProductPage (req, res) {
   let productId = req.params.id
   Product
@@ -41,6 +43,7 @@ function getEditProductPage (req, res) {
     .catch(err => res.status(500).send(err))
 }
 
+// TODO auth rights
 function getDeleteProductPage (req, res) {
   let productId = req.params.id
   Product
@@ -63,7 +66,7 @@ function addProduct (req, res) {
     slug: slug(req.body.name.toLocaleLowerCase(), { lowercase: true }),
     cuid: cuid(),
     isBought: req.body.isBought,
-    creator: req.body.creator,
+    creator: req.user._id,
     buyer: req.body.buyer,
     category: req.body.category
   }
@@ -100,6 +103,7 @@ function addProduct (req, res) {
     })
 }
 
+// TODO auth rights
 function buyProduct (req, res) {
   let productId = req.params.id
 
@@ -126,61 +130,66 @@ function buyProduct (req, res) {
     .catch(err => res.status(500).send(err))
 }
 
+// TODO auth rights
 function editProduct (req, res) {
   let productId = req.params.id
   let editedProduct = req.body
-
   Product
     .findById(productId)
     .then((product) => {
-      product.name = editedProduct.name || product.name
-      product.slug = slug(product.name.toLocaleLowerCase(), { lowercase: true })
-      product.description = editedProduct.description
-      product.price = editedProduct.price || product.price
-      if (req.file) {
-        let oldImage = product.image
-        let filename = req.file.path.split(/[\\\/]/g).pop()
-        product.image = `images/${filename}`
-        if (oldImage !== DEFAULT_PRODUCT_IMAGE) {
-          fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', oldImage), (err) => {
-            if (err) {
-              console.error(err)
-              return
-            }
-          })
+      let canEdit = (product.creator === req.user._id) || req.user.roles.includes('Admin')
+      if (canEdit) {
+        product.name = editedProduct.name || product.name
+        product.slug = slug(product.name.toLocaleLowerCase(), { lowercase: true })
+        product.description = editedProduct.description
+        product.price = editedProduct.price || product.price
+        if (req.file) {
+          let oldImage = product.image
+          let filename = req.file.path.split(/[\\\/]/g).pop()
+          product.image = `images/${filename}`
+          if (oldImage !== DEFAULT_PRODUCT_IMAGE) {
+            fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', oldImage), (err) => {
+              if (err) {
+                console.error(err)
+                return
+              }
+            })
+          }
         }
-      }
 
-      if (editedProduct.category.toString() !== product.category.toString()) {
-        Category
-          .findById(product.category)
-          .then((currentCategory) => {
-            Category
-              .findById(editedProduct.category)
-              .then((newCategory) => {
-                let indexOfProduct = currentCategory.products.indexOf(product._id)
-                if (indexOfProduct >= 0) {
-                  currentCategory.products.splice(indexOfProduct, 1)
-                  currentCategory.save()
-                }
+        if (editedProduct.category.toString() !== product.category.toString()) {
+          Category
+            .findById(product.category)
+            .then((currentCategory) => {
+              Category
+                .findById(editedProduct.category)
+                .then((newCategory) => {
+                  let indexOfProduct = currentCategory.products.indexOf(product._id)
+                  if (indexOfProduct >= 0) {
+                    currentCategory.products.splice(indexOfProduct, 1)
+                    currentCategory.save()
+                  }
 
-                newCategory.products.push(product._id)
-                newCategory.save()
+                  newCategory.products.push(product._id)
+                  newCategory.save()
 
-                product.category = editedProduct.category
-                product
-                  .save()
-                  .then((savedProduct) => {
-                    res.redirect(302, '/')
-                  })
-              })
-          })
+                  product.category = editedProduct.category
+                  product
+                    .save()
+                    .then((savedProduct) => {
+                      res.redirect(302, '/')
+                    })
+                })
+            })
+        } else {
+          product
+            .save()
+            .then((savedProduct) => {
+              res.redirect(302, '/')
+            })
+        }
       } else {
-        product
-          .save()
-          .then((savedProduct) => {
-            res.redirect(302, '/')
-          })
+        res.redirect(302, '/')
       }
     })
     .catch((err) => {
@@ -195,29 +204,33 @@ function editProduct (req, res) {
     })
 }
 
+// TODO auth rights
 function deleteProduct (req, res) {
   let productId = req.params.id
 
   Product
     .findByIdAndRemove(productId)
     .then((product) => {
-      if (product.image !== DEFAULT_PRODUCT_IMAGE) {
-        fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', product.image), (err) => {
-          if (err) {
-            console.error(err)
-            return
+      let canDelete = (product.creator === req.user._id) || req.user.roles.includes('Admin')
+      if (canDelete) {
+        if (product.image !== DEFAULT_PRODUCT_IMAGE) {
+          fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', product.image), (err) => {
+            if (err) {
+              console.error(err)
+              return
+            }
+          })
+        }
+
+        Category.findById(product.category).then((category) => {
+          let indexOfProduct = category.products.indexOf(product._id)
+          if (indexOfProduct >= 0) {
+            category.products.splice(indexOfProduct, 1)
+            category.save()
+            res.redirect(302, '/')
           }
         })
       }
-
-      Category.findById(product.category).then((category) => {
-        let indexOfProduct = category.products.indexOf(product._id)
-        if (indexOfProduct >= 0) {
-          category.products.splice(indexOfProduct, 1)
-          category.save()
-          res.redirect(302, '/')
-        }
-      })
     })
     .catch(err => res.status(500).send(err))
 }

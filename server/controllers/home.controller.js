@@ -3,7 +3,7 @@ const Product = require('./../models/product')
 function getHomePage (req, res) {
   let name = new RegExp(req.query.name, 'gui')
   Product
-    .find({ name: { $regex: name } })
+    .find({ name: { $regex: name }, buyer: null })
     .populate('category')
     .then((products) => {
       res.render('home/index', { products })
