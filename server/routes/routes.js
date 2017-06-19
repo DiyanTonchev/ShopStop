@@ -57,6 +57,10 @@ router.route('/user/logout').post((req, res) => {
   UserController.logout(req, res)
 })
 
+router.route('/profile/:username').get(auth.isAuthenticated, (req, res) => {
+  UserController.getProfile(req, res)
+})
+
 // PRODUCT
 router.route('/product/add').get(auth.isAuthenticated, (req, res) => {
   ProductController.getAddProductPage(req, res)

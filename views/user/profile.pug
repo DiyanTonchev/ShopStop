@@ -1,0 +1,24 @@
+extends ../layout.pug
+
+block content
+    h2.head-title #{user.username}
+    .product-card 
+        strong User info:
+        p First Name: #{user.firstName}
+        p Last Name: #{user.lastName}
+    .error-msg #{error}
+    if products.length
+        h2 User's products
+        .cards 
+            each product in products
+                .product-card
+                    img.product-img(src=`../${product.image}`)
+                    h2=product.name
+                    p=product.description
+                    p=product.price
+                    p=`Category: ${product.category.name}`
+
+                    a.btn.btn-small.btn-warning(href=`/product/edit/${product._id}`)= 'Edit'
+                    a.btn.btn-small.btn-danger(href=`/product/delete/${product._id}`)= 'Delete'
+                        a.btn.btn-small.btn-primary(href=`/category/${product.category.slug}/products`)
+                            =`More ${product.category.name}`

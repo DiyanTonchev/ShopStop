@@ -23,7 +23,7 @@ function getBuyProductPage (req, res) {
   Product
     .findById(productId)
     .then((product) => {
-      if (product.buyer) {
+      if (product.isBought) {
         res.render('product/buy', { error: messages.auth.productAlreadyBought })
         return
       }
@@ -128,6 +128,7 @@ function buyProduct (req, res) {
       }
 
       product.buyer = req.user._id
+      product.isBought = true
       product
         .save()
         .then(() => {

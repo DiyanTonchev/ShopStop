@@ -86,10 +86,29 @@ function logout (req, res) {
   res.redirect(302, '/')
 }
 
+function getProfile (req, res) {
+  let username = req.params.username
+
+  User
+    .findOne({ username })
+    .populate({
+      path: 'boughtProducts',
+      select: 'image name description slug price category',
+      populate: { path: 'category' }
+    })
+    .populate('category')
+    // .populate('boughtProducts', 'image name description slug price category')
+    .then((user) => {
+      res.render('user/profile', { user, products: user.boughtProducts })
+    })
+    .catch(err => res.status(500).send(err))
+}
+
 module.exports = {
   getRegisterPage,
   getLoginPage,
   register,
   login,
-  logout
+  logout,
+  getProfile
 }
