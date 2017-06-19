@@ -5,6 +5,7 @@ const slug = require('slug')
 const serverConfig = require('./../config')
 const Product = require('./../models/product')
 const Category = require('./../models/category')
+const messages = require('./../utilities/messages')
 
 const DEFAULT_PRODUCT_IMAGE = 'images/default-product-image.jpg'
 
@@ -17,43 +18,55 @@ function getAddProductPage (req, res) {
     .catch(err => res.status(500).send(err))
 }
 
-// TODO auth rights
 function getBuyProductPage (req, res) {
   let productId = req.params.id
   Product
     .findById(productId)
     .then((product) => {
+      if (product.buyer) {
+        res.render('product/buy', { error: messages.auth.productAlreadyBought })
+        return
+      }
+
       res.render('product/buy', { product })
     })
     .catch(err => res.status(500).send(err))
 }
 
-// TODO auth rights
 function getEditProductPage (req, res) {
   let productId = req.params.id
   Product
     .findById(productId)
     .then((product) => {
-      Category
-        .find()
-        .then((categories) => {
-          res.render('product/edit', { product, categories })
-        })
+      let canEdit = (product.creator.equals(req.user._id)) || req.user.roles.includes('Admin')
+      if (canEdit) {
+        Category
+          .find()
+          .then((categories) => {
+            res.render('product/edit', { product, categories })
+          })
+      } else {
+        res.redirect(302, '/')
+      }
     })
     .catch(err => res.status(500).send(err))
 }
 
-// TODO auth rights
 function getDeleteProductPage (req, res) {
   let productId = req.params.id
   Product
     .findById(productId)
     .then((product) => {
-      Category
-        .find()
-        .then((categories) => {
-          res.render('product/delete', { product, categories })
-        })
+      let canDelete = (product.creator.equals(req.user._id)) || req.user.roles.includes('Admin')
+      if (canDelete) {
+        Category
+          .find()
+          .then((categories) => {
+            res.render('product/delete', { product, categories })
+          })
+      } else {
+        res.redirect(302, '/')
+      }
     })
     .catch(err => res.status(500).send(err))
 }
@@ -103,7 +116,6 @@ function addProduct (req, res) {
     })
 }
 
-// TODO auth rights
 function buyProduct (req, res) {
   let productId = req.params.id
 
@@ -111,7 +123,7 @@ function buyProduct (req, res) {
     .findById(productId)
     .then((product) => {
       if (product.buyer) {
-        res.render('/', { error: 'Product was already bought!' })
+        res.render('product/buy', { error: messages.auth.productAlreadyBought })
         return
       }
 
@@ -130,14 +142,13 @@ function buyProduct (req, res) {
     .catch(err => res.status(500).send(err))
 }
 
-// TODO auth rights
 function editProduct (req, res) {
   let productId = req.params.id
   let editedProduct = req.body
   Product
     .findById(productId)
     .then((product) => {
-      let canEdit = (product.creator === req.user._id) || req.user.roles.includes('Admin')
+      let canEdit = (product.creator.equals(req.user._id)) || req.user.roles.includes('Admin')
       if (canEdit) {
         product.name = editedProduct.name || product.name
         product.slug = slug(product.name.toLocaleLowerCase(), { lowercase: true })
@@ -204,14 +215,13 @@ function editProduct (req, res) {
     })
 }
 
-// TODO auth rights
 function deleteProduct (req, res) {
   let productId = req.params.id
 
   Product
     .findByIdAndRemove(productId)
     .then((product) => {
-      let canDelete = (product.creator === req.user._id) || req.user.roles.includes('Admin')
+      let canDelete = (product.creator.equals(req.user._id)) || req.user.roles.includes('Admin')
       if (canDelete) {
         if (product.image !== DEFAULT_PRODUCT_IMAGE) {
           fs.unlink(path.join(serverConfig.rootPath, 'public', 'content', product.image), (err) => {
@@ -230,6 +240,8 @@ function deleteProduct (req, res) {
             res.redirect(302, '/')
           }
         })
+      } else {
+        res.redirect(302, '/')
       }
     })
     .catch(err => res.status(500).send(err))

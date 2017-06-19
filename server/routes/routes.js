@@ -58,7 +58,7 @@ router.route('/user/logout').post((req, res) => {
 })
 
 // PRODUCT
-router.route('/product/add').get(auth.isAuthenticated, auth.isAuthenticated, (req, res) => {
+router.route('/product/add').get(auth.isAuthenticated, (req, res) => {
   ProductController.getAddProductPage(req, res)
 })
 
@@ -78,7 +78,7 @@ router.route('/product/add').post(auth.isAuthenticated, upload.single('image'), 
   ProductController.addProduct(req, res)
 })
 
-router.route('/product/buy/:id').post((req, res) => {
+router.route('/product/buy/:id').post(auth.isAuthenticated, (req, res) => {
   ProductController.buyProduct(req, res)
 })
 

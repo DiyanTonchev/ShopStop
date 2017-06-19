@@ -14,5 +14,10 @@ module.exports = {
     authentication: 'Authentication error!',
     invalidCredentials: 'Invalid Credentials!',
     passwordsNotMatch: 'Passwords do not match.'
+  },
+  auth: {
+    productAlreadyBought: 'Product was already bought!',
+    cantEdit: 'You do not have rights to edit this product!',
+    cantDelete: 'You do not have rights to delete this product!'
   }
 }
