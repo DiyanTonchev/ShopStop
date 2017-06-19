@@ -97,7 +97,6 @@ function getProfile (req, res) {
       populate: { path: 'category' }
     })
     .populate('category')
-    // .populate('boughtProducts', 'image name description slug price category')
     .then((user) => {
       res.render('user/profile', { user, products: user.boughtProducts })
     })
